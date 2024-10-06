@@ -1,7 +1,7 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
-import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
 
 // API to register a user
@@ -27,7 +27,7 @@ const registerUser = async (req, res) => {
         // hashing user password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        
+
 
         // saving user to database
         const userData = {
@@ -82,5 +82,18 @@ const loginUser = async (req, res) => {
     }
 }
 
+// API to get user profile details
+const getProfile = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const userData = await userModel.findById(userId).select("-password");
+        res.json({ success: true, userData });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
-export { registerUser, loginUser }
+
+
+export { registerUser, loginUser, getProfile }
