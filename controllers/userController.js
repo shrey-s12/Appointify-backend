@@ -5,6 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 import userModel from "../models/userModel.js";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
+import razorpay from "razorpay";
 
 
 // API to register a user
@@ -219,11 +220,21 @@ const cancelAppointment = async (req, res) => {
 
 
         res.json({ success: true, message: "Appointment cancelled successfully" });
-        
+
     }
     catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 }
+
+// const razorpayInstance = new razorpay({
+//     key_id: process.env.RAZORPAY_KEY_ID,
+//     key_secret: process.env.RAZORPAY_KEY_SECRET
+// })
+
+
+// API to make payment for an appointment using Razorpay
+// const paymentrazorpay = async (req, res) => {
+// }
 
 export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment }

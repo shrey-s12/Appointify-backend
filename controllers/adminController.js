@@ -1,8 +1,9 @@
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import { v2 as cloudinary } from 'cloudinary';
-import doctorModel from '../models/doctorModel.js';
 import jwt from 'jsonwebtoken';
+import doctorModel from '../models/doctorModel.js';
+import appointmentModel from '../models/appointmentModel.js';
 
 // API for adding doctor
 const addDoctor = async (req, res) => {
@@ -60,7 +61,7 @@ const addDoctor = async (req, res) => {
         res.status(201).json({ success: true, message: "Doctor added successfully" });
 
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        res.json({ success:false, message: error.message });
     }
 }
 
@@ -79,7 +80,7 @@ const loginAdmin = async (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        res.json({ success:false, message: error.message });
     }
 }
 
@@ -89,8 +90,18 @@ const allDoctors = async (req, res) => {
         const doctors = await doctorModel.find({}).select("-password");
         res.json({ success: true, doctors });
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        res.json({ success:false, message: error.message });
     }
 }
 
-export { addDoctor, loginAdmin, allDoctors };
+// API to get all appointments list
+const appointmentsAdmin = async (req, res) => {
+    try {
+        const appointments = await appointmentModel.find({});
+        res.json({ success: true, appointments });
+    } catch (error) {
+        res.json({ success:false, message: error.message });
+    }
+}
+
+export { addDoctor, loginAdmin, allDoctors, appointmentsAdmin };
