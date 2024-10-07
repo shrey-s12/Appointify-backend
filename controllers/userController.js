@@ -127,12 +127,13 @@ const updateProfile = async (req, res) => {
 // API to book an appointment
 const bookAppointment = async (req, res) => {
     try {
+        console.log("shrey")
         const { userId, docId, slotDate, slotTime } = req.body;
 
         const docData = await doctorModel.findById(docId).select("-password");
 
         if (!docData.available) {
-            return res.status(400).json({ success: false, message: "Doctor not available" });
+            return res.json({ success: false, message: "Doctor not available" });
         }
 
         let slots_booked = docData.slots_booked;
@@ -140,7 +141,7 @@ const bookAppointment = async (req, res) => {
         // checking for slot availability
         if (slots_booked[slotDate]) {
             if (slots_booked[slotDate].includes(slotTime)) {
-                return res.status(400).json({ success: false, message: "Slot not available" });
+                return res.json({ success: false, message: "Slot not available" });
             }
             else {
                 slots_booked[slotDate].push(slotTime);
@@ -176,6 +177,7 @@ const bookAppointment = async (req, res) => {
 
     }
     catch (error) {
+        console.log("singhal")
         res.status(500).json({ success: false, message: error.message });
     }
 }
