@@ -127,7 +127,6 @@ const updateProfile = async (req, res) => {
 // API to book an appointment
 const bookAppointment = async (req, res) => {
     try {
-        console.log("shrey")
         const { userId, docId, slotDate, slotTime } = req.body;
 
         const docData = await doctorModel.findById(docId).select("-password");
@@ -177,9 +176,20 @@ const bookAppointment = async (req, res) => {
 
     }
     catch (error) {
-        console.log("singhal")
         res.status(500).json({ success: false, message: error.message });
     }
 }
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment }
+// API to get user's appointments
+const listAppointment = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const appointments = await appointmentModel.find({ userId });
+        res.json({ success: true, appointments });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment }
